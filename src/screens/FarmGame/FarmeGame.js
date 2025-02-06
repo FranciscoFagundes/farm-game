@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { Stage, Layer, Rect } from "react-konva";
 
-const GRID_SIZE = 20; // 20x20 células
-const CELL_SIZE = 50; // Tamanho das células
+const GRID_SIZE = 20; 
+const CELL_SIZE = 50; 
 const STAGE_WIDTH = 800;
 const STAGE_HEIGHT = 600;
 
 const PLANT_OPTIONS = {
-  none: "green", // Gramado
-  milho: "#a2d149", // Verde-claro
-  trigo: "blue", // Marrom
-  girassol: "#e3c700", // Amarelo
+  none: "green", 
+  milho: "#a2d149", 
+  trigo: "blue",
+  girassol: "#e3c700", 
 };
 
 const FarmGame = () => {
