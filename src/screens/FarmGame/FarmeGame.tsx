@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Stage, Layer, Rect } from "react-konva";
 
-const GRID_SIZE = 20; 
-const CELL_SIZE = 50; 
+const GRID_SIZE = 20;
+const CELL_SIZE = 50;
 const STAGE_WIDTH = 800;
 const STAGE_HEIGHT = 600;
 
 const PLANT_OPTIONS = {
-  none: "green", 
-  milho: "#a2d149", 
+  none: "green",
+  milho: "#a2d149",
   trigo: "blue",
-  girassol: "#e3c700", 
+  girassol: "#e3c700",
 };
 
 const FarmGame = () => {
@@ -37,7 +37,8 @@ const FarmGame = () => {
             style={{
               padding: "10px",
               backgroundColor: PLANT_OPTIONS[plant],
-              border: selectedPlant === plant ? "3px solid black" : "1px solid gray",
+              border:
+                selectedPlant === plant ? "3px solid black" : "1px solid gray",
               cursor: "pointer",
             }}
           >
