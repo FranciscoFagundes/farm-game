@@ -14,22 +14,40 @@ const PLANT_OPTIONS = {
 };
 
 const FarmGame = () => {
+
   const [farm, setFarm] = useState(
     Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill("none"))
   );
 
-  const [selectedPlant, setSelectedPlant] = useState("milho");
+  const [cultivated, setCultivated] = useState(
+    Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(false))
+  );
 
-  const handleClick = (row, col) => {
-    if (farm[row][col] !== "none") return;
-    const newFarm = farm.map((r, rIdx) =>
-      r.map((c, cIdx) => (rIdx === row && cIdx === col ? selectedPlant : c))
-    );
-    setFarm(newFarm);
+  const [selectedPlant, setSelectedPlant] = useState("milho");
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const [isHoeing, setIsHoeing] = useState(false);
+
+
+  const handleClick = (row: number, col: number) => {
+    if (isHoeing) {
+      const newCultivated = cultivated.map((r, rIdx) =>
+        r.map((c, cIdx) => (rIdx === row && cIdx === col ? true : c))
+      );
+      setCultivated(newCultivated);
+    } else if (cultivated[row][col] && farm[row][col] === "none") {
+      const newFarm = farm.map((r, rIdx) =>
+        r.map((c, cIdx) => (rIdx === row && cIdx === col ? selectedPlant : c))
+      );
+      setFarm(newFarm);
+    }
   };
 
   return (
     <div>
+      <button onClick={() => setIsHoeing(!isHoeing)} style={{ backgroundColor: isHoeing ? 'brown' : 'lightgray' }}>
+        {isHoeing ? 'Hoeing Mode' : 'Activate Hoe'}
+      </button>
       <Stage width={STAGE_WIDTH} height={STAGE_HEIGHT}>
         <Layer>
           {farm.map((row, rowIndex) =>
@@ -40,34 +58,52 @@ const FarmGame = () => {
                 y={rowIndex * CELL_SIZE}
                 width={CELL_SIZE}
                 height={CELL_SIZE}
-                fill={PLANT_OPTIONS[cell]}
+                fill={cultivated[rowIndex][colIndex] ? (cell === "none" ? 'brown' : PLANT_OPTIONS[cell]) : PLANT_OPTIONS[cell]}
                 onClick={() => handleClick(rowIndex, colIndex)}
               />
             ))
           )}
         </Layer>
         <Layer>
-          <Text
-            text="Selecione a plantação:"
-            fontSize={20}
+          <Rect
             x={10}
             y={10}
+            width={150}
+            height={40}
+            fill="gray"
+            onClick={() => setMenuOpen(!menuOpen)} // Alterna a visibilidade do menu
+          />
+          <Text
+            text="Menu"
+            fontSize={18}
+            x={20}
+            y={15}
+            fill="white"
+          />
+        </Layer>
+        {menuOpen && (
+        <Layer>
+          <Text
+            text="Selecione:"
+            fontSize={20}
+            x={10}
+            y={100}
             fill="white"
           />
           {Object.keys(PLANT_OPTIONS).map((plant, index) => (
             <Rect
               key={plant}
               x={200 + index * 100}
-              y={10}
+              y={100}
               width={80}
               height={30}
               fill={PLANT_OPTIONS[plant]}
               stroke={selectedPlant === plant ? "black" : "white"}
               strokeWidth={selectedPlant === plant ? 3 : 1}
-              onClick={() => setSelectedPlant(plant)}
+              onClick={() => {setSelectedPlant(plant); setMenuOpen(false);}}
             />
           ))}
-        </Layer>
+        </Layer>)}
       </Stage>
     </div>
   );
